@@ -199,7 +199,6 @@ class _HomePageState extends State<HomePage> {
                 indiGlobalDuration = Duration(seconds: seconds);
               }
             });
-            print(widget.globalDuration);
           });
         } else {
           FetchingDataHandler.printData(widget.sleepRecordList!);

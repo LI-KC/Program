@@ -4,11 +4,17 @@ import 'package:flutter_project/class/SleepRecord.dart';
 import 'package:http/http.dart' as http;
 
 class FetchingDataHandler {
-  // static String ipAddress = '172.16.200.34';
-  static String ipAddress = '192.168.1.141';
+  static String? ipAddress;
+
+  static Future<void> init() async {
+    var res = await http.get(Uri.parse('https://api.db-ip.com/v2/free/self'));
+    Map<String, dynamic> jsonObj = jsonDecode(res.body);
+    ipAddress = jsonObj['ipAddress'];
+    print(ipAddress);
+  }
 
   static void fetchingSleepData(List<SleepingRecord> sleepRecordList) async {
-    var res = await http.get(Uri.parse('http://$ipAddress:80/testing'));
+    var res = await http.get(Uri.parse('http://$ipAddress:80/frameType'));
     if (res.statusCode == 200) {
       var sleepRecord = SleepingRecord.fromJson(jsonDecode(res.body));
       print('Sleep Record: $sleepRecord');
@@ -24,9 +30,56 @@ class FetchingDataHandler {
     }
   }
 
+  static void fetchFrameType(List<SleepingRecord> sleepRecordList) async {
+    var res = await http.get(Uri.parse('http://$ipAddress:80/frameType'));
+    if (res.statusCode == 200) {
+      Map<String, dynamic> jsonObj = jsonDecode(res.body);
+      var frameType = jsonObj['type'];
+      print('FrameType: $frameType');
+      var currentSleepRecord = sleepRecordList.last;
+      if (currentSleepRecord.ifSamePeriod()) {
+        switch (frameType) {
+          case 'Body Movement':
+            currentSleepRecord.bodyMovement += 1;
+            break;
+          case 'Cough':
+            currentSleepRecord.cough += 1;
+            break;
+          case 'Snore':
+            currentSleepRecord.snore += 1;
+            break;
+          case 'None':
+            break;
+          default:
+            break;
+        }
+        print('last: $currentSleepRecord');
+      } else {
+        var sleepRecord = SleepingRecord();
+        switch (frameType) {
+          case 'Body Movement':
+            sleepRecord.bodyMovement += 1;
+            break;
+          case 'Cough':
+            sleepRecord.cough += 1;
+            break;
+          case 'Snore':
+            sleepRecord.snore += 1;
+            break;
+          case 'None':
+            break;
+          default:
+            break;
+        }
+        sleepRecordList.add(sleepRecord);
+        print('new: $sleepRecord');
+      }
+    }
+  }
+
   static void printData(List<SleepingRecord> sleepRecordList) {
-    sleepRecordList
-        .asMap()
-        .forEach((index, value) => print('${index + 1}: $value'));
+    sleepRecordList.asMap().forEach(
+          (index, value) => print('${index + 1}: $value'),
+        );
   }
 }

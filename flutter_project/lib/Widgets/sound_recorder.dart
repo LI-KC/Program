@@ -48,9 +48,12 @@ class SoundRecorder {
   Future _record() async {
     if (!_isRecorderInitialised) return;
 
-    timer = Timer.periodic(const Duration(seconds: 3),
-        (Timer t) => FetchingDataHandler.fetchingSleepData(sleepRecordList!));
-    // timer = Timer.periodic(Duration(minutes: 10), (timer) { })
+    await FetchingDataHandler.init();
+    timer = Timer.periodic(
+      // const Duration(seconds: 3),
+      const Duration(seconds: 1),
+      (Timer t) => FetchingDataHandler.fetchFrameType(sleepRecordList!),
+    );
 
     await _audioRecorder!.startRecorder(toFile: savePath);
   }

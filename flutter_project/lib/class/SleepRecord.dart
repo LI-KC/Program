@@ -7,7 +7,8 @@ class SleepingRecord {
   int bodyMovement = 0;
 
   ifSamePeriod() {
-    return DateTime.now().isBefore(date.add(const Duration(minutes: 15)));
+    // return DateTime.now().isBefore(date.add(const Duration(minutes: 15)));
+    return DateTime.now().isBefore(date.add(const Duration(seconds: 20)));
   }
 
   SleepingRecord();
@@ -26,4 +27,6 @@ class SleepingRecord {
   toString() {
     return 'date: $date, snore: $snore, cough: $cough, bodymovement: $bodyMovement';
   }
+
+  static void calculate(List<SleepingRecord> sleepRecordList) {}
 }
