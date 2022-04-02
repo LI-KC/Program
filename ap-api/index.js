@@ -1,4 +1,5 @@
 require('dotenv-safe').config({ allowEmptyValues: true });
+const TYPE = ['Body Movement', 'Snore', 'Cough', 'None'];
 const express = require('express');
 const compression = require('compression');
 const fileUpload = require('express-fileupload');
@@ -27,7 +28,9 @@ app.get('/testing', (req, res) => {
 
     return res.status(200).json({  bodyMovement, snore, cough });
 });
-
+app.get('/frameType', (req, res) => {
+    return res.status(200).json({ type:  TYPE[Math.floor(Math.random() * 4)]});
+});
 
 const server = app.listen(app.get('port'), () => {console.log(`Server running on port ${app.get('port')}`)});
 

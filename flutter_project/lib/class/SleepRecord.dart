@@ -7,8 +7,7 @@ class SleepingRecord {
   int bodyMovement = 0;
 
   ifSamePeriod() {
-    return DateTime.now().isBefore(date.add(const Duration(seconds: 10)));
-    // return DateTime.now().isBefore(date.add(const Duration(hours: 1)));
+    return DateTime.now().isBefore(date.add(const Duration(minutes: 15)));
   }
 
   SleepingRecord();

@@ -57,11 +57,15 @@ class _HomePageState extends State<HomePage> {
     _weekDay = DateFormat('EEEE').format(DateTime.now());
     _dateTime = DateFormat('HH:mm MMM').format(DateTime.now());
     timer = Timer.periodic(
-        const Duration(seconds: 3),
-        (Timer t) => setState(() {
-              _weekDay = DateFormat('EEEE').format(DateTime.now());
-              _dateTime = DateFormat('HH:mm MMM').format(DateTime.now());
-            }));
+      // 3 seconds -> 16000 * 3 samples per frame -> model training using 3 second per frame
+      const Duration(seconds: 3),
+      (Timer t) => setState(
+        () {
+          _weekDay = DateFormat('EEEE').format(DateTime.now());
+          _dateTime = DateFormat('HH:mm MMM').format(DateTime.now());
+        },
+      ),
+    );
 
     // init recorder
     recorder = SoundRecorder();
