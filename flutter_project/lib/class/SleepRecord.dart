@@ -1,13 +1,16 @@
 import 'package:intl/intl.dart';
 
 class SleepingRecord {
-  final DateTime date = DateTime.now();
+  final DateTime initDateTime = DateTime.now();
   int snore = 0;
   int cough = 0;
+  int bodyMovement = 0;
 
   ifSamePeriod() {
-    // return DateTime.now().isBefore(date.add(const Duration(minutes: 15)));
-    return DateTime.now().isBefore(date.add(const Duration(seconds: 20)));
+    // return DateTime.now()
+    //     .isBefore(initDateTime.add(const Duration(minutes: 1)));
+    return DateTime.now()
+        .isBefore(initDateTime.add(const Duration(seconds: 20)));
   }
 
   SleepingRecord();
@@ -26,7 +29,7 @@ class SleepingRecord {
 
   @override
   toString() {
-    return 'date: $date, snore: $snore, cough: $cough';
+    return '$initDateTime snore: $snore cough: $cough bodymovement: $bodyMovement';
   }
 
   static void calculate(List<SleepingRecord> sleepRecordList) {}

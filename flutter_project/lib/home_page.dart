@@ -98,7 +98,7 @@ class _HomePageState extends State<HomePage> {
                   color: Color.fromRGBO(5, 21, 31, 1),
                 ),
                 width: 400,
-                height: 325,
+                height: 335,
                 alignment: const Alignment(0, 0.75),
                 child: Column(
                   children: [

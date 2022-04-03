@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter_project/class/SleepRecord.dart';
+import 'package:sensors_plus/sensors_plus.dart';
 import 'package:http/http.dart' as http;
 
 class FetchingDataHandler {
@@ -29,8 +30,10 @@ class FetchingDataHandler {
     }
   }
 
-  static void fetchFrameType(List<SleepingRecord> sleepRecordList) async {
-    var res = await http.get(Uri.parse('http://$ipAddress:80/frameType'));
+  static void fetchFrameType(
+      List<SleepingRecord> sleepRecordList, eventFrag) async {
+    // var res = await http.get(Uri.parse('http://$ipAddress:80/frameType'));
+    var res = await http.get(Uri.parse('http://172.16.187.131:80/frameType'));
     if (res.statusCode == 200) {
       Map<String, dynamic> jsonObj = jsonDecode(res.body);
       var frameType = jsonObj['type'];
@@ -49,23 +52,27 @@ class FetchingDataHandler {
           default:
             break;
         }
+        if (eventFrag) currentSleepRecord.bodyMovement += 1;
+
         print('last: $currentSleepRecord');
       } else {
-        var sleepRecord = SleepingRecord();
+        var newSleepRecord = SleepingRecord();
         switch (frameType) {
           case 'Cough':
-            sleepRecord.cough += 1;
+            newSleepRecord.cough += 1;
             break;
           case 'Snore':
-            sleepRecord.snore += 1;
+            newSleepRecord.snore += 1;
             break;
           case 'None':
             break;
           default:
             break;
         }
-        sleepRecordList.add(sleepRecord);
-        print('new: $sleepRecord');
+        newSleepRecord.bodyMovement += 1;
+        sleepRecordList.add(newSleepRecord);
+
+        print('new: $newSleepRecord');
       }
     }
   }

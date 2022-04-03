@@ -41,6 +41,8 @@ class _MyHomePageState extends State<MyHomePage> {
   List<double>? _magnetometerValues;
   final _streamSubscriptions = <StreamSubscription<dynamic>>[];
 
+  bool eventFlag = false;
+
   @override
   Widget build(BuildContext context) {
     final accelerometer =
@@ -70,9 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 width: _snakeColumns * _snakeCellSize,
                 child: Column(
                   children: [
-                    Text(_snakeRows.toString()),
-                    Text(_snakeColumns.toString()),
-                    Text(_snakeCellSize.toString()),
+                    Text(eventFlag.toString()),
                   ],
                 ),
               ),
@@ -143,10 +143,14 @@ class _MyHomePageState extends State<MyHomePage> {
       gyroscopeEvents.listen(
         (GyroscopeEvent event) {
           setState(() {
-            _gyroscopeValues = <double>[event.x, event.y, event.z];
-            var value = _gyroscopeValues!
+            // _gyroscopeValues = <double>[event.x, event.y, event.z]
+            var value = <double>[event.x, event.y, event.z]
                 .reduce((value, element) => value + element.abs());
-            if (value != 0) print('Not equal to zero');
+            if (value == 0) {
+              eventFlag = false;
+            } else {
+              eventFlag = true;
+            }
           });
         },
       ),
