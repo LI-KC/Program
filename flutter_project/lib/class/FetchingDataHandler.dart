@@ -23,7 +23,6 @@ class FetchingDataHandler {
         print('last: $currentSleepRecord');
         currentSleepRecord.cough += sleepRecord.cough;
         currentSleepRecord.snore += sleepRecord.snore;
-        currentSleepRecord.bodyMovement += sleepRecord.bodyMovement;
       } else {
         sleepRecordList.add(sleepRecord);
       }
@@ -39,9 +38,6 @@ class FetchingDataHandler {
       var currentSleepRecord = sleepRecordList.last;
       if (currentSleepRecord.ifSamePeriod()) {
         switch (frameType) {
-          case 'Body Movement':
-            currentSleepRecord.bodyMovement += 1;
-            break;
           case 'Cough':
             currentSleepRecord.cough += 1;
             break;
@@ -57,9 +53,6 @@ class FetchingDataHandler {
       } else {
         var sleepRecord = SleepingRecord();
         switch (frameType) {
-          case 'Body Movement':
-            sleepRecord.bodyMovement += 1;
-            break;
           case 'Cough':
             sleepRecord.cough += 1;
             break;

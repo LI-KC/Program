@@ -144,6 +144,9 @@ class _MyHomePageState extends State<MyHomePage> {
         (GyroscopeEvent event) {
           setState(() {
             _gyroscopeValues = <double>[event.x, event.y, event.z];
+            var value = _gyroscopeValues!
+                .reduce((value, element) => value + element.abs());
+            if (value != 0) print('Not equal to zero');
           });
         },
       ),
