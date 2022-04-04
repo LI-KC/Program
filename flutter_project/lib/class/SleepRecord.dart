@@ -1,10 +1,11 @@
 import 'package:intl/intl.dart';
 
+// 1 minute per 1 record, 3 * 20, 20 records in 1 record
 class SleepingRecord {
   final DateTime initDateTime = DateTime.now();
   int snore = 0;
   int cough = 0;
-  int bodyMovement = 0;
+  int bodyMovement = 0; // maximum 20
 
   ifSamePeriod() {
     // return DateTime.now()
@@ -31,6 +32,4 @@ class SleepingRecord {
   toString() {
     return '$initDateTime snore: $snore cough: $cough bodymovement: $bodyMovement';
   }
-
-  static void calculate(List<SleepingRecord> sleepRecordList) {}
 }

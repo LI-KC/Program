@@ -58,7 +58,7 @@ class _WaveState extends State<Wave> {
                     widget.lastSleepRecord.toString(),
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 8,
+                      fontSize: 20,
                     ),
                   ),
                 ],
