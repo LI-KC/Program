@@ -32,8 +32,8 @@ class FetchingDataHandler {
   }
 
   static void fetchFrameType(List<SleepingRecord> sleepRecordList) async {
-    var res = await http.get(Uri.parse('http://$ipAddress:80/frameType'));
-    // var res = await http.get(Uri.parse('http://172.16.187.131:80/frameType'));
+    // var res = await http.get(Uri.parse('http://$ipAddress:80/frameType'));
+    var res = await http.get(Uri.parse('http://172.16.187.131:80/frameType'));
     if (res.statusCode == 200) {
       Map<String, dynamic> jsonObj = jsonDecode(res.body);
       var frameType = jsonObj['type'];

@@ -12,6 +12,7 @@ class SleepingRecord {
     //     .isBefore(initDateTime.add(const Duration(minutes: 1)));
     return DateTime.now()
         .isBefore(initDateTime.add(const Duration(seconds: 20)));
+    // .isBefore(initDateTime.add(const Duration(seconds: 3)));
   }
 
   SleepingRecord();

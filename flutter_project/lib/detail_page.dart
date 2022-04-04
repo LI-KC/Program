@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_project/class/SleepRecord.dart';
+import 'class/wakeIndexCalculator.dart';
 import 'Widgets/Wave.dart';
 
 class DetailPage extends StatefulWidget {
@@ -20,8 +21,8 @@ class _DetailPageState extends State<DetailPage> {
   @override
   void initState() {
     super.initState();
-    print('DETAIL INIT: ${widget.lastSleepRecordListList}');
-    print('Global Timer: ${widget.globalDuration}');
+    // print('DETAIL INIT: ${widget.lastSleepRecordListList}');
+    // print('Global Timer: ${widget.globalDuration}');
   }
 
   @override
@@ -45,8 +46,17 @@ class _DetailPageState extends State<DetailPage> {
           ),
           backgroundColor: const Color.fromRGBO(5, 21, 31, 1));
     }
-    List<SleepingRecord> lastSleepRecord = widget.lastSleepRecordListList!.last;
     Duration lastDuration = widget.globalDuration!.last;
+    List<SleepingRecord> lastSleepRecord = widget.lastSleepRecordListList!.last;
+
+    print('lastDuration: $lastDuration');
+    print('lastRecord: $lastSleepRecord, length: ${lastSleepRecord.length}');
+
+    // lastSleepRecord.length > 6
+    List<double> scoreList =
+        WakeIndexCalculator.calculateSleepIndex(lastSleepRecord);
+
+    print('scoreList: $scoreList');
 
     return Scaffold(
       appBar: AppBar(
@@ -55,7 +65,7 @@ class _DetailPageState extends State<DetailPage> {
       ),
       body: Center(
         child: Wave.withData(
-          lastSleepRecord: lastSleepRecord,
+          scoreList: scoreList,
           lastDuration: lastDuration,
         ),
       ),

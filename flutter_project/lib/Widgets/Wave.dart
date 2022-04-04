@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 import '../class/SleepRecord.dart';
 
 class Wave extends StatefulWidget {
-  List<SleepingRecord>? lastSleepRecord;
+  List<double>? scoreList;
   Duration? lastDuration;
 
   Wave({Key? key}) : super(key: key);
   Wave.withData({
     Key? key,
-    required this.lastSleepRecord,
+    required this.scoreList,
     required this.lastDuration,
   }) : super(key: key);
 
@@ -33,7 +33,7 @@ class _WaveState extends State<Wave> {
 
   @override
   Widget build(BuildContext content) {
-    if (widget.lastSleepRecord == null || widget.lastDuration == null) {
+    if (widget.scoreList == null || widget.lastDuration == null) {
       return const Text(
         "You have not started today's recording yet",
         style: TextStyle(color: Color.fromRGBO(36, 159, 191, 1)),
@@ -55,10 +55,10 @@ class _WaveState extends State<Wave> {
                     style: TextStyle(color: Colors.white),
                   ),
                   Text(
-                    widget.lastSleepRecord.toString(),
+                    widget.scoreList.toString(),
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 20,
+                      fontSize: 10,
                     ),
                   ),
                 ],
