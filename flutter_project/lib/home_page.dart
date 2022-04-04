@@ -20,12 +20,17 @@ class HomePage extends StatefulWidget {
   List<Duration>? globalDuration;
   final Function updateDuration;
 
+  // static bool globalEventFlag;
+  // final VoidCallback changeGlobalEventFlag;
+
   HomePage({
     Key? key,
     required this.sleepRecordList,
     required this.popSleepRecordList,
     required this.globalDuration,
     required this.updateDuration,
+    // required this.globalEventFlag,
+    // required this.changeGlobalEventFlag,
   }) : super(key: key);
 
   @override
@@ -58,9 +63,10 @@ class _HomePageState extends State<HomePage> {
     _dateTime = DateFormat('HH:mm MMM').format(DateTime.now());
     timer = Timer.periodic(
       // 3 seconds -> 16000 * 3 samples per frame -> model training using 3 second per frame
-      const Duration(seconds: 3),
+      const Duration(milliseconds: 1),
       (Timer t) => setState(
         () {
+          // print('big: ${widget.globalEventFlag}');
           _weekDay = DateFormat('EEEE').format(DateTime.now());
           _dateTime = DateFormat('HH:mm MMM').format(DateTime.now());
         },
@@ -68,7 +74,10 @@ class _HomePageState extends State<HomePage> {
     );
 
     // init recorder
-    recorder = SoundRecorder();
+    recorder = SoundRecorder(
+        // widget.globalEventFlag,
+        // widget.changeGlobalEventFlag,
+        );
     recorder!.init();
 
     print('HOME INITTTTT: ${widget.sleepRecordList}');

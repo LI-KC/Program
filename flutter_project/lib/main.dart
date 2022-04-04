@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_project/class/SleepRecord.dart';
-import 'package:http/http.dart' as http;
+import 'class/FetchingDataHandler.dart';
+import 'package:sensors_plus/sensors_plus.dart';
 import 'detail_page.dart';
 import 'history_page.dart';
 import 'home_page.dart';
@@ -42,6 +43,8 @@ class _MyHomePageState extends State<MyHomePage> {
   static List<List<SleepingRecord>> lastSleepRecordListList = [];
   static List<Duration> globalDuration = [];
 
+  static bool globalEventFlag = false;
+
   static updateDuration(newDuration) {
     globalDuration.add(newDuration);
     print('on9: $globalDuration');
@@ -65,14 +68,30 @@ class _MyHomePageState extends State<MyHomePage> {
         sleepRecordList.clear();
       },
       updateDuration: updateDuration,
+      // globalEventFlag: globalEventFlag,
+      // changeGlobalEventFlag: () {
+      //   globalEventFlag = false;
+      // },
     ),
     HistoryPage(
       sleepRecordListList: sleepRecordListList,
     ),
-    // Text(
-    //   globalDuration.toString(),
-    // ),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+
+    gyroscopeEvents.listen((GyroscopeEvent event) {
+      var _gyroscopeValues = <double>[event.x, event.y, event.z]
+          .reduce((value, element) => value + element.abs());
+      print(_gyroscopeValues);
+      if (_gyroscopeValues != 0) {
+        globalEventFlag = true;
+        FetchingDataHandler.globalEventFlag = globalEventFlag;
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -95,13 +114,14 @@ class _MyHomePageState extends State<MyHomePage> {
             label: 'History',
             backgroundColor: Color.fromRGBO(36, 159, 191, 1),
           ),
-          //   BottomNavigationBarItem(
-          //     icon: Icon(Icons.safety_divider),
-          //     label: 'Testing',
-          //     backgroundColor: Color.fromRGBO(36, 159, 191, 1),
-          //   ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(Icons.safety_divider),
+          //   label: 'Testing',
+          //   backgroundColor: Color.fromRGBO(36, 159, 191, 1),
+          // ),
         ],
         onTap: (int index) => setState(() {
+          print(globalEventFlag);
           _selectedIndex = index;
         }),
         currentIndex: _selectedIndex,

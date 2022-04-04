@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 
 class FetchingDataHandler {
   static String? ipAddress;
+  static bool globalEventFlag = false;
 
   static Future<void> init() async {
     var res = await http.get(Uri.parse('https://api.db-ip.com/v2/free/self'));
@@ -30,14 +31,14 @@ class FetchingDataHandler {
     }
   }
 
-  static void fetchFrameType(
-      List<SleepingRecord> sleepRecordList, eventFrag) async {
-    // var res = await http.get(Uri.parse('http://$ipAddress:80/frameType'));
-    var res = await http.get(Uri.parse('http://172.16.187.131:80/frameType'));
+  static void fetchFrameType(List<SleepingRecord> sleepRecordList) async {
+    var res = await http.get(Uri.parse('http://$ipAddress:80/frameType'));
+    // var res = await http.get(Uri.parse('http://172.16.187.131:80/frameType'));
     if (res.statusCode == 200) {
       Map<String, dynamic> jsonObj = jsonDecode(res.body);
       var frameType = jsonObj['type'];
       print('FrameType: $frameType');
+      if (sleepRecordList.isEmpty) return;
       var currentSleepRecord = sleepRecordList.last;
       if (currentSleepRecord.ifSamePeriod()) {
         switch (frameType) {
@@ -52,7 +53,12 @@ class FetchingDataHandler {
           default:
             break;
         }
-        if (eventFrag) currentSleepRecord.bodyMovement += 1;
+        // print('eventflag: $eventFrag');
+        if (globalEventFlag) {
+          currentSleepRecord.bodyMovement += 1;
+          print('increased one');
+          globalEventFlag = false;
+        }
 
         print('last: $currentSleepRecord');
       } else {
@@ -69,7 +75,12 @@ class FetchingDataHandler {
           default:
             break;
         }
-        newSleepRecord.bodyMovement += 1;
+        // print('eventflag: $eventFrag');
+        if (globalEventFlag) {
+          currentSleepRecord.bodyMovement += 1;
+          print('increased one');
+          globalEventFlag = false;
+        }
         sleepRecordList.add(newSleepRecord);
 
         print('new: $newSleepRecord');
