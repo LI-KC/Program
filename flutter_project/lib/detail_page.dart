@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_project/class/SleepRecord.dart';
+import 'package:intl/intl.dart';
 import 'class/wakeIndexCalculator.dart';
 import 'Widgets/Wave.dart';
 
@@ -46,14 +47,16 @@ class _DetailPageState extends State<DetailPage> {
           ),
           backgroundColor: const Color.fromRGBO(5, 21, 31, 1));
     }
-    Duration lastDuration = widget.globalDuration!.last;
     List<SleepingRecord> lastSleepRecord = widget.lastSleepRecordListList!.last;
 
-    print('lastDuration: $lastDuration');
-    print('lastRecord: $lastSleepRecord, length: ${lastSleepRecord.length}');
+    String startHm = DateFormat.Hm().format(lastSleepRecord.first.initDateTime);
+    String endHm = DateFormat.Hm().format(lastSleepRecord.last.initDateTime);
+    Duration lastDuration = widget.globalDuration!.last;
 
-    // lastSleepRecord.length > 6
-    List<double> scoreList =
+    print('lastDuration ($startHm - $endHm): $lastDuration');
+    // print('lastRecord: $lastSleepRecord, length: ${lastSleepRecord.length}');
+
+    List<Map<String, double>> scoreList =
         WakeIndexCalculator.calculateSleepIndex(lastSleepRecord);
 
     print('scoreList: $scoreList');
@@ -65,6 +68,8 @@ class _DetailPageState extends State<DetailPage> {
       ),
       body: Center(
         child: Wave.withData(
+          startHm: startHm,
+          endHm: startHm,
           scoreList: scoreList,
           lastDuration: lastDuration,
         ),

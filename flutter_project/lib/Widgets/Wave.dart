@@ -4,12 +4,18 @@ import 'package:flutter/material.dart';
 import '../class/SleepRecord.dart';
 
 class Wave extends StatefulWidget {
-  List<double>? scoreList;
+  // final String startHm = '23:03';
+  // final String endHm = '09:48';
+  String? startHm;
+  String? endHm;
+  List<Map<String, double>>? scoreList;
   Duration? lastDuration;
 
   Wave({Key? key}) : super(key: key);
   Wave.withData({
     Key? key,
+    required this.startHm,
+    required this.endHm,
     required this.scoreList,
     required this.lastDuration,
   }) : super(key: key);
@@ -23,12 +29,50 @@ class _WaveState extends State<Wave> {
     const Color(0xff23b6e6),
     const Color(0xff02d39a),
   ];
-
   bool showAvg = false;
 
   @override
   void initState() {
     super.initState();
+  }
+
+  int _getCount() {
+    var count = int.parse(widget.endHm!.substring(0, 2)) -
+        int.parse(widget.startHm!.substring(0, 2));
+    if (count < 0) {
+      return (count + 24);
+    }
+    return count;
+    // return (widget.scoreList!.length / 60).round().toInt(); // !!
+  }
+
+  List<FlSpot> _updatingGraph() {
+    List<FlSpot> wakeIndexScoreList = [];
+    widget.scoreList!.forEach((mapElement) {
+      double baseIndex = 0;
+      var hour = int.parse([...mapElement.keys][0].substring(0, 2));
+      var minuteIndex = int.parse([...mapElement.keys][0].substring(3, 5)) / 60;
+
+      baseIndex = baseIndex +
+          (hour - int.parse(widget.startHm!.substring(0, 2))) +
+          minuteIndex;
+
+      var wakeIndex = [...mapElement.values][0] * 10;
+      if (wakeIndex > 10) wakeIndex = 10;
+      wakeIndexScoreList.add(FlSpot(baseIndex, wakeIndex));
+    });
+    print('list: $wakeIndexScoreList');
+    return wakeIndexScoreList;
+  }
+
+  double _getSleepEfficiency() {
+    int sleepCount = 0;
+    widget.scoreList!.forEach((mapElement) {
+      var score = [...mapElement.values][0];
+      if (score < 1) sleepCount++;
+    });
+
+    return sleepCount / widget.scoreList!.length * 100;
   }
 
   @override
@@ -39,26 +83,33 @@ class _WaveState extends State<Wave> {
         style: TextStyle(color: Color.fromRGBO(36, 159, 191, 1)),
       );
     }
+
     return Column(children: <Widget>[
-      Container(
+      SizedBox(
         width: 275,
         height: 97,
         child: Center(
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    'Final Score',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  Text(
-                    widget.scoreList.toString(),
+                  const Text(
+                    'Sleep Efficiency',
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 10,
+                      fontSize: 19,
+                    ),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.only(top: 6),
+                  ),
+                  Text(
+                    '${_getSleepEfficiency().toStringAsFixed(0)}%',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
                     ),
                   ),
                 ],
@@ -112,6 +163,7 @@ class _WaveState extends State<Wave> {
         drawHorizontalLine: false,
         drawVerticalLine: true,
         verticalInterval: null, // hardcode
+        // verticalInterval: 15, // hardcode
         getDrawingVerticalLine: (value) {
           return FlLine(
             color: const Color(0xff37434d),
@@ -129,14 +181,9 @@ class _WaveState extends State<Wave> {
           getTextStyles: (context, value) =>
               const TextStyle(color: Color(0xff68737d), fontSize: 13.5),
           getTitles: (value) {
-            switch (value.toInt()) {
-              case 0:
-                return 'Deep Sleep';
-              case 10:
-                return 'Sleep';
-              case 19:
-                return 'Awake';
-            }
+            if (value == 0) return 'Deep Sleep';
+            if (value == 5) return 'Sleep';
+            if (value == 10) return 'Awake';
             return '';
           },
           margin: 10,
@@ -146,7 +193,16 @@ class _WaveState extends State<Wave> {
           reservedSize: 0,
           getTextStyles: (context, value) =>
               const TextStyle(color: Color(0xff68737d), fontSize: 14),
-          getTitles: (value) => value.toInt().toString().padLeft(2, '0'),
+          getTitles: (value) {
+            var index =
+                (value.toInt() + int.parse(widget.startHm!.substring(0, 2)))
+                    .toString()
+                    .padLeft(2, '0');
+            if (int.parse(index) >= 24) {
+              return (int.parse(index) - 24).toString().padLeft(2, '0');
+            }
+            return index;
+          },
           margin: 8,
           interval: 1,
         ),
@@ -158,24 +214,17 @@ class _WaveState extends State<Wave> {
           left: BorderSide(color: Color(0xff37434d), width: 2),
         ),
       ),
-      minX: 0, // dynamic
-      maxX: 9, // dynamic
+      minX: _updatingGraph()[0].x, // dynamic
+      maxX: _getCount().toDouble() + 1, // dynamic
       minY: 0,
-      maxY: 19,
+      maxY: 13,
       lineBarsData: [
         LineChartBarData(
-          spots: const [
-            FlSpot(0, 1),
-            FlSpot(1, 2),
-            FlSpot(3, 2),
-            FlSpot(4.9, 0),
-            FlSpot(6.8, 1),
-            FlSpot(8, 0),
-            FlSpot(9, 0),
-          ],
-          isCurved: true,
+          spots: _updatingGraph(),
+          isCurved: false,
+          // isCurved: true,
           colors: gradientColors,
-          barWidth: 5,
+          barWidth: 2.5,
           isStrokeCapRound: true,
           dotData: FlDotData(
             show: false,
@@ -190,3 +239,22 @@ class _WaveState extends State<Wave> {
     );
   }
 }
+
+// FlSpot(0, 0),
+// FlSpot(1, 1),
+// FlSpot(1.2, 0.75),
+// FlSpot(1.5, 0.5),
+// FlSpot(1.75, 0.25),
+// FlSpot(2, 0),
+// FlSpot(2.25, 0.25),
+// FlSpot(2.5, 1),
+// FlSpot(2.75, 0.75),
+// FlSpot(3, 1),
+// FlSpot(5, 0),
+// FlSpot(5.05, 0),
+// FlSpot(5.1, 0),
+// FlSpot(5.2, 0),
+// FlSpot(5.5, 0),
+// FlSpot(6, 0),
+// FlSpot(8, 0),
+// FlSpot(9, 0),

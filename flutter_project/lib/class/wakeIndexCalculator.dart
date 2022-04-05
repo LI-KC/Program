@@ -1,17 +1,19 @@
+import 'package:intl/intl.dart';
+
 import 'SleepRecord.dart';
 
 class WakeIndexCalculator {
   static int _convertToActiveScore(dynamic input) {
-    if (input is SleepingRecord) return input.bodyMovement * 15;
+    if (input is SleepingRecord) return input.bodyMovement * 25;
     return 0;
   }
 
-  static List<double> calculateSleepIndex(
+  static List<Map<String, double>> calculateSleepIndex(
       List<SleepingRecord> sleepRecordListWithLength7) {
-    List<double> wakeIndexList = [];
+    List<Map<String, double>> wakeIndexList = [];
     var sleepRecordList = sleepRecordListWithLength7;
     sleepRecordList.asMap().forEach((index, value) {
-      print('index: $index');
+      // print('index: $index');
       int lastTwo = sleepRecordList.length - 2;
       int lastOne = sleepRecordList.length - 1;
       int a_4 = 0, a_3 = 0, a_2 = 0, a_1 = 0, a_0 = 0, a1 = 0, a2 = 0;
@@ -67,7 +69,11 @@ class WakeIndexCalculator {
               0.21 * a_0 +
               0.12 * a1 +
               0.13 * a2);
-      wakeIndexList.add(double.parse(finalScore.toStringAsFixed(2)));
+      Map<String, double> wakeIndexMap = {
+        DateFormat.Hm().format(value.initDateTime):
+            double.parse(finalScore.toStringAsFixed(2))
+      };
+      wakeIndexList.add(wakeIndexMap);
     });
     return wakeIndexList;
   }
