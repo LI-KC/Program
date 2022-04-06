@@ -10,6 +10,7 @@ class Wave extends StatefulWidget {
   String? endHm;
   List<Map<String, double>>? scoreList;
   Duration? lastDuration;
+  bool historyMode = false;
 
   Wave({Key? key}) : super(key: key);
   Wave.withData({
@@ -19,6 +20,15 @@ class Wave extends StatefulWidget {
     required this.scoreList,
     required this.lastDuration,
   }) : super(key: key);
+
+  Wave.historyMode({
+    Key? key,
+    required this.startHm,
+    required this.endHm,
+    required this.scoreList,
+    required this.lastDuration,
+    required this.historyMode,
+  });
 
   @override
   _WaveState createState() => _WaveState();
@@ -83,7 +93,78 @@ class _WaveState extends State<Wave> {
         style: TextStyle(color: Color.fromRGBO(36, 159, 191, 1)),
       );
     }
-
+    if (widget.historyMode) {
+      return Column(children: <Widget>[
+        SizedBox(
+          width: 275,
+          height: 70,
+          child: Center(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      'Sleep Efficiency',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 15,
+                      ),
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.only(top: 6),
+                    ),
+                    Text(
+                      '${_getSleepEfficiency().toStringAsFixed(0)}%',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                      ),
+                    ),
+                  ],
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      'Total Sleep Time',
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: Color.fromARGB(255, 135, 157, 171),
+                      ),
+                    ),
+                    Text(
+                      '${widget.lastDuration!.inHours.toString().padLeft(2, '0')}h${widget.lastDuration!.inMinutes.remainder(60).toString().padLeft(2, '0')}m',
+                      style: const TextStyle(
+                        fontSize: 19,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+        AspectRatio(
+          aspectRatio: 0.87,
+          child: Container(
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.all(
+                Radius.circular(18),
+              ),
+              // color: Color(0xff232d37)
+            ),
+            child: Padding(
+              padding: const EdgeInsets.only(
+                  right: 25, left: 12.0, top: 10, bottom: 0),
+              child: LineChart(mainData()),
+            ),
+          ),
+        ),
+      ]);
+    }
     return Column(children: <Widget>[
       SizedBox(
         width: 275,

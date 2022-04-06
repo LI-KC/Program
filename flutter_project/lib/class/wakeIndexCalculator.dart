@@ -4,7 +4,7 @@ import 'SleepRecord.dart';
 
 class WakeIndexCalculator {
   static int _convertToActiveScore(dynamic input) {
-    if (input is SleepingRecord) return input.bodyMovement * 25;
+    if (input is SleepingRecord) return input.bodyMovement * 20;
     return 0;
   }
 

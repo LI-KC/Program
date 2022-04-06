@@ -96,13 +96,18 @@ class _HistoryPageState extends State<HistoryPage> {
         body: Center(
           child: Column(
             children: [
+              Padding(
+                padding: EdgeInsets.only(
+                  top: 10,
+                ),
+              ),
               Wrap(
                 children: [
                   const Text(
                     'Record: ',
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 35,
+                      fontSize: 20,
                     ),
                   ),
                   DropdownButton<Map<int, List<SleepingRecord>>>(
@@ -115,14 +120,16 @@ class _HistoryPageState extends State<HistoryPage> {
                         showingObj = scoreList.toString();
                       });
                     },
+                    // itemHeight: 10,
                   ),
                 ],
               ),
-              Wave.withData(
+              Wave.historyMode(
                 startHm: startHm,
                 endHm: endHm,
                 scoreList: scoreList,
                 lastDuration: lastDuration,
+                historyMode: true,
               )
             ],
           ),

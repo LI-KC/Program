@@ -165,7 +165,7 @@ class _HomePageState extends State<HomePage> {
 
     var icon = isRecording ? Icons.stop : Icons.mic;
     var text = isRecording ? 'STOP' : 'START';
-    var primary = isRecording ? Colors.red : Colors.white;
+    var primary = isRecording ? Colors.grey : Colors.white;
     var onPrimary = isRecording ? Colors.white : Colors.black;
 
     return ElevatedButton.icon(
