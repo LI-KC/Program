@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter_project/class/SleepRecord.dart';
-import 'package:sensors_plus/sensors_plus.dart';
 import 'package:http/http.dart' as http;
 
 class FetchingDataHandler {

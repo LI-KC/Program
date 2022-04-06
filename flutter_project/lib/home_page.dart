@@ -1,18 +1,11 @@
 // ignore_for_file: avoid_print
 import 'dart:async';
-import 'dart:convert';
 import 'package:flutter_project/class/FetchingDataHandler.dart';
-import 'package:flutter_project/detail_page.dart';
-import 'package:flutter_sound/flutter_sound.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'Widgets/sound_recorder.dart';
-import 'class/class.dart';
 import 'class/SleepRecord.dart';
 import 'package:intl/intl.dart';
-import 'Widgets/Wave.dart';
 import 'Widgets/timer_widget.dart';
-import 'detail_page.dart';
 
 class HomePage extends StatefulWidget {
   List<SleepingRecord>? sleepRecordList;

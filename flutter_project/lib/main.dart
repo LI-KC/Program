@@ -75,6 +75,7 @@ class _MyHomePageState extends State<MyHomePage> {
     ),
     HistoryPage(
       sleepRecordListList: sleepRecordListList,
+      globalDuration: globalDuration,
     ),
   ];
 

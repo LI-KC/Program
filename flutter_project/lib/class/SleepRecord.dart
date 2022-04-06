@@ -1,5 +1,3 @@
-import 'package:intl/intl.dart';
-
 // 1 minute per 1 record, 3 * 20, 20 records in 1 record
 class SleepingRecord {
   final DateTime initDateTime = DateTime.now();
