@@ -216,18 +216,21 @@ class _WaveState extends State<Wave> {
       ),
       minX: _updatingGraph()[0].x, // dynamic
       maxX: _getCount().toDouble() + 1, // dynamic
-      minY: 0,
+      minY: -1,
       maxY: 13,
       lineBarsData: [
         LineChartBarData(
+          show: true,
           spots: _updatingGraph(),
-          isCurved: false,
-          // isCurved: true,
+          // isCurved: false,
+          isCurved: true,
           colors: gradientColors,
           barWidth: 2.5,
+          // isStrokeCapRound: false,
           isStrokeCapRound: true,
           dotData: FlDotData(
             show: false,
+            // show: true,
           ),
           belowBarData: BarAreaData(
             show: true,

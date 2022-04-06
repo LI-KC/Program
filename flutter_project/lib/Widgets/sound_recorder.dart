@@ -58,7 +58,7 @@ class SoundRecorder {
 
     timer = Timer.periodic(
         // const Duration(seconds: 3),
-        const Duration(seconds: 1), (Timer t) {
+        const Duration(seconds: 3), (Timer t) {
       // print('globalEventFlag: $globalEventFlag');
       FetchingDataHandler.fetchFrameType(sleepRecordList!);
       // FetchingDataHandler.fetchFrameType(sleepRecordList!, globalEventFlag);
