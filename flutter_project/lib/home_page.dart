@@ -179,54 +179,58 @@ class _HomePageState extends State<HomePage> {
         text,
         style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
       ),
-      onPressed: () async {
-        if (!isRecording) {
-          widget.sleepRecordList!.add(SleepingRecord());
-          recorder!.passInRecordList(widget.sleepRecordList!);
+      onPressed: (isRecording &&
+              indiGlobalDuration!.compareTo(const Duration(minutes: 7)) < 0)
+          ? null
+          : () async {
+              if (!isRecording) {
+                widget.sleepRecordList!.add(SleepingRecord());
+                recorder!.passInRecordList(widget.sleepRecordList!);
 
-          setState(() {
-            indiGlobalDuration = const Duration();
-          });
+                setState(() {
+                  indiGlobalDuration = const Duration();
+                });
 
-          globalDurationTimer = Timer.periodic(const Duration(seconds: 1), (_) {
-            const addSecond = 1;
+                globalDurationTimer =
+                    Timer.periodic(const Duration(seconds: 1), (_) {
+                  const addSecond = 1;
 
-            setState(() {
-              final seconds = indiGlobalDuration!.inSeconds + addSecond;
-              print(seconds);
+                  setState(() {
+                    final seconds = indiGlobalDuration!.inSeconds + addSecond;
+                    print(seconds);
 
-              if (seconds < 0) {
-                globalDurationTimer?.cancel();
+                    if (seconds < 0) {
+                      globalDurationTimer?.cancel();
+                    } else {
+                      indiGlobalDuration = Duration(seconds: seconds);
+                    }
+                  });
+                });
               } else {
-                indiGlobalDuration = Duration(seconds: seconds);
+                FetchingDataHandler.printData(widget.sleepRecordList!);
+                widget.popSleepRecordList();
+
+                globalDurationTimer!.cancel();
+                print(widget.globalDuration);
+                widget.updateDuration(
+                  Duration(
+                    seconds: indiGlobalDuration!.inSeconds,
+                  ),
+                );
               }
-            });
-          });
-        } else {
-          FetchingDataHandler.printData(widget.sleepRecordList!);
-          widget.popSleepRecordList();
 
-          globalDurationTimer!.cancel();
-          print(widget.globalDuration);
-          widget.updateDuration(
-            Duration(
-              seconds: indiGlobalDuration!.inSeconds,
-            ),
-          );
-        }
+              await recorder!.toggleRecording();
+              isRecording = recorder!.isRecording;
 
-        await recorder!.toggleRecording();
-        isRecording = recorder!.isRecording;
-
-        if (isRecording) {
-          timerController.startTimer();
-        } else {
-          timerController.stopTimer();
-        }
-        setState(() {});
-        // fetchingSleepData();
-        // outputData();
-      },
+              if (isRecording) {
+                timerController.startTimer();
+              } else {
+                timerController.stopTimer();
+              }
+              setState(() {});
+              // fetchingSleepData();
+              // outputData();
+            },
     );
   }
 }

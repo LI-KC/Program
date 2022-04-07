@@ -20,7 +20,7 @@ class HistoryPage extends StatefulWidget {
 
 class _HistoryPageState extends State<HistoryPage> {
   String showingObj = '';
-  List<Map<String, double>>? scoreList;
+  List<Map<String, SleepingRecord>>? scoreList;
   String? startHm, endHm;
   Duration? lastDuration;
 
@@ -82,11 +82,11 @@ class _HistoryPageState extends State<HistoryPage> {
       );
     }
     List<String> dateTimeList = [];
-    widget.sleepRecordListList!.forEach((sleepRecordList) {
+    for (var sleepRecordList in widget.sleepRecordListList!) {
       String dateTime =
           DateFormat.yMd().format(sleepRecordList[0].initDateTime);
       dateTimeList.add(dateTime);
-    });
+    }
 
     return Scaffold(
         appBar: AppBar(
@@ -96,7 +96,7 @@ class _HistoryPageState extends State<HistoryPage> {
         body: Center(
           child: Column(
             children: [
-              Padding(
+              const Padding(
                 padding: EdgeInsets.only(
                   top: 10,
                 ),

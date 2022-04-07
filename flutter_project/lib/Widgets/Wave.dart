@@ -8,7 +8,7 @@ class Wave extends StatefulWidget {
   // final String endHm = '09:48';
   String? startHm;
   String? endHm;
-  List<Map<String, double>>? scoreList;
+  List<Map<String, SleepingRecord>>? scoreList;
   Duration? lastDuration;
   bool historyMode = false;
 
@@ -28,7 +28,7 @@ class Wave extends StatefulWidget {
     required this.scoreList,
     required this.lastDuration,
     required this.historyMode,
-  });
+  }) : super(key: key);
 
   @override
   _WaveState createState() => _WaveState();
@@ -49,6 +49,7 @@ class _WaveState extends State<Wave> {
   int _getCount() {
     var count = int.parse(widget.endHm!.substring(0, 2)) -
         int.parse(widget.startHm!.substring(0, 2));
+    print(count);
     if (count < 0) {
       return (count + 24);
     }
@@ -67,7 +68,7 @@ class _WaveState extends State<Wave> {
           (hour - int.parse(widget.startHm!.substring(0, 2))) +
           minuteIndex;
 
-      var wakeIndex = [...mapElement.values][0] * 10;
+      var wakeIndex = [...mapElement.values][0].sleepIndex * 10;
       if (wakeIndex > 10) wakeIndex = 10;
       wakeIndexScoreList.add(FlSpot(baseIndex, wakeIndex));
     });
@@ -78,7 +79,7 @@ class _WaveState extends State<Wave> {
   double _getSleepEfficiency() {
     int sleepCount = 0;
     widget.scoreList!.forEach((mapElement) {
-      var score = [...mapElement.values][0];
+      var score = [...mapElement.values][0].sleepIndex;
       if (score < 1) sleepCount++;
     });
 
@@ -239,6 +240,36 @@ class _WaveState extends State<Wave> {
 
   LineChartData mainData() {
     return LineChartData(
+      lineTouchData: LineTouchData(
+        touchTooltipData: LineTouchTooltipData(
+          getTooltipItems: (
+            List<LineBarSpot> touchedBarSpots,
+          ) {
+            return touchedBarSpots.map(
+              (barSpot) {
+                final flSpot = barSpot;
+                return LineTooltipItem(
+                  '',
+                  const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  children: [
+                    TextSpan(
+                      // text: flSpot.bar.spots,
+                      text: [...widget.scoreList![flSpot.spotIndex].values][0]
+                          .toString(),
+                      style: const TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                );
+              },
+            ).toList();
+          },
+        ),
+      ),
       gridData: FlGridData(
         show: true,
         drawHorizontalLine: false,
@@ -307,11 +338,9 @@ class _WaveState extends State<Wave> {
           isCurved: true,
           colors: gradientColors,
           barWidth: 2.5,
-          // isStrokeCapRound: false,
           isStrokeCapRound: true,
           dotData: FlDotData(
             show: false,
-            // show: true,
           ),
           belowBarData: BarAreaData(
             show: true,

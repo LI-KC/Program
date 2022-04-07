@@ -86,7 +86,7 @@ class _MyHomePageState extends State<MyHomePage> {
     gyroscopeEvents.listen((GyroscopeEvent event) {
       var _gyroscopeValues = <double>[event.x, event.y, event.z]
           .reduce((value, element) => value + element.abs());
-      if (_gyroscopeValues.abs() > 0.005) {
+      if (_gyroscopeValues.abs() > 0.1) {
         print(_gyroscopeValues);
         globalEventFlag = true;
         FetchingDataHandler.globalEventFlag = globalEventFlag;

@@ -56,7 +56,7 @@ class _DetailPageState extends State<DetailPage> {
     print('lastDuration ($startHm - $endHm): $lastDuration');
     // print('lastRecord: $lastSleepRecord, length: ${lastSleepRecord.length}');
 
-    List<Map<String, double>> scoreList =
+    List<Map<String, SleepingRecord>> scoreList =
         WakeIndexCalculator.calculateSleepIndex(lastSleepRecord);
 
     print('scoreList: $scoreList');
