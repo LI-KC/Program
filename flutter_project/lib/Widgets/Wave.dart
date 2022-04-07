@@ -59,7 +59,7 @@ class _WaveState extends State<Wave> {
 
   List<FlSpot> _updatingGraph() {
     List<FlSpot> wakeIndexScoreList = [];
-    widget.scoreList!.forEach((mapElement) {
+    for (var mapElement in widget.scoreList!) {
       double baseIndex = 0;
       var hour = int.parse([...mapElement.keys][0].substring(0, 2));
       var minuteIndex = int.parse([...mapElement.keys][0].substring(3, 5)) / 60;
@@ -71,17 +71,17 @@ class _WaveState extends State<Wave> {
       var wakeIndex = [...mapElement.values][0].sleepIndex * 10;
       if (wakeIndex > 10) wakeIndex = 10;
       wakeIndexScoreList.add(FlSpot(baseIndex, wakeIndex));
-    });
+    }
     print('list: $wakeIndexScoreList');
     return wakeIndexScoreList;
   }
 
   double _getSleepEfficiency() {
     int sleepCount = 0;
-    widget.scoreList!.forEach((mapElement) {
+    for (var mapElement in widget.scoreList!) {
       var score = [...mapElement.values][0].sleepIndex;
       if (score < 1) sleepCount++;
-    });
+    }
 
     return sleepCount / widget.scoreList!.length * 100;
   }
@@ -89,6 +89,12 @@ class _WaveState extends State<Wave> {
   @override
   Widget build(BuildContext content) {
     if (widget.scoreList == null || widget.lastDuration == null) {
+      if (widget.historyMode) {
+        return const Text(
+          "You have not selected any record",
+          style: TextStyle(color: Color.fromRGBO(36, 159, 191, 1)),
+        );
+      }
       return const Text(
         "You have not started today's recording yet",
         style: TextStyle(color: Color.fromRGBO(36, 159, 191, 1)),
@@ -169,7 +175,7 @@ class _WaveState extends State<Wave> {
     return Column(children: <Widget>[
       SizedBox(
         width: 275,
-        height: 97,
+        height: 93,
         child: Center(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -220,7 +226,7 @@ class _WaveState extends State<Wave> {
         ),
       ),
       AspectRatio(
-        aspectRatio: 0.8,
+        aspectRatio: 0.82,
         child: Container(
           decoration: const BoxDecoration(
             borderRadius: BorderRadius.all(
@@ -256,7 +262,6 @@ class _WaveState extends State<Wave> {
                   ),
                   children: [
                     TextSpan(
-                      // text: flSpot.bar.spots,
                       text: [...widget.scoreList![flSpot.spotIndex].values][0]
                           .toString(),
                       style: const TextStyle(
@@ -327,7 +332,8 @@ class _WaveState extends State<Wave> {
         ),
       ),
       minX: _updatingGraph()[0].x, // dynamic
-      maxX: _getCount().toDouble() + 1, // dynamic
+      maxX: _updatingGraph().last.x,
+      // maxX: _getCount().toDouble() + 1, // dynamic
       minY: -1,
       maxY: 13,
       lineBarsData: [
@@ -352,22 +358,3 @@ class _WaveState extends State<Wave> {
     );
   }
 }
-
-// FlSpot(0, 0),
-// FlSpot(1, 1),
-// FlSpot(1.2, 0.75),
-// FlSpot(1.5, 0.5),
-// FlSpot(1.75, 0.25),
-// FlSpot(2, 0),
-// FlSpot(2.25, 0.25),
-// FlSpot(2.5, 1),
-// FlSpot(2.75, 0.75),
-// FlSpot(3, 1),
-// FlSpot(5, 0),
-// FlSpot(5.05, 0),
-// FlSpot(5.1, 0),
-// FlSpot(5.2, 0),
-// FlSpot(5.5, 0),
-// FlSpot(6, 0),
-// FlSpot(8, 0),
-// FlSpot(9, 0),
