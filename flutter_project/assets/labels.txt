@@ -1,0 +1,3 @@
+0 Cough
+1 Normal
+2 Snoring

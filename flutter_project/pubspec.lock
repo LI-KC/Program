@@ -427,6 +427,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.4.8"
+  tflite_audio:
+    dependency: "direct main"
+    description:
+      name: tflite_audio
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.3.0"
   typed_data:
     dependency: transitive
     description:

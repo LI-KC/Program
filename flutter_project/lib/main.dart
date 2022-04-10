@@ -5,6 +5,7 @@ import 'package:sensors_plus/sensors_plus.dart';
 import 'detail_page.dart';
 import 'history_page.dart';
 import 'home_page.dart';
+import 'package:tflite_audio/tflite_audio.dart';
 
 void main() {
   runApp(const MyApp());
@@ -40,6 +41,10 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  String _sound = 'press the button to start';
+  bool _recording = false;
+  Stream<Map<dynamic, dynamic>>? recognitionStream;
+
   static List<SleepingRecord> sleepRecordList = [];
   static List<List<SleepingRecord>> sleepRecordListList = [];
   static List<List<SleepingRecord>> lastSleepRecordListList = [];
@@ -94,7 +99,35 @@ class _MyHomePageState extends State<MyHomePage> {
         FetchingDataHandler.globalEventFlag = globalEventFlag;
       }
     });
+
+    // TfliteAudio.loadModel(
+    //   model: 'assets/soundclassifier.tflite',
+    //   label: 'assets/labels.txt',
+    //   inputType: 'decodedWav',
+    // );
   }
+
+  // void _recorder() {
+  //   String recognition = "";
+  //   if (!_recording) {
+  //     setState(() => _recording = true);
+  //     recognitionStream = TfliteAudio.startAudioRecognition(
+  //       numOfInferences: 1,
+  //       inputType: 'rawAudio',
+  //       sampleRate: 44100,
+  //       recordingLength: 44032,
+  //       bufferSize: 22016,
+  //     );
+  //     recognitionStream!.listen((event) {
+  //       recognition = event["recognitionResult"];
+  //     }).onDone(() {
+  //       setState(() {
+  //         _recording = false;
+  //         _sound = recognition.split(" ")[1];
+  //       });
+  //     });
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
