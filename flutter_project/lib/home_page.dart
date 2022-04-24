@@ -9,8 +9,8 @@ import 'Widgets/timer_widget.dart';
 
 class HomePage extends StatefulWidget {
   List<SleepingRecord>? sleepRecordList;
-  final VoidCallback popSleepRecordList;
   List<Duration>? globalDuration;
+  final VoidCallback popSleepRecordList;
   final Function updateDuration;
 
   // static bool globalEventFlag;
@@ -67,10 +67,7 @@ class _HomePageState extends State<HomePage> {
     );
 
     // init recorder
-    recorder = SoundRecorder(
-        // widget.globalEventFlag,
-        // widget.changeGlobalEventFlag,
-        );
+    recorder = SoundRecorder();
     recorder!.init();
 
     print('HOME INITTTTT: ${widget.sleepRecordList}');
@@ -180,7 +177,7 @@ class _HomePageState extends State<HomePage> {
         style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
       ),
       onPressed: (isRecording &&
-              indiGlobalDuration!.compareTo(const Duration(minutes: 7)) < 0)
+              indiGlobalDuration!.compareTo(const Duration(seconds: 7)) < 0)
           ? null
           : () async {
               if (!isRecording) {

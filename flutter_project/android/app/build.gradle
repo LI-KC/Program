@@ -51,7 +51,7 @@ android {
     }
 
     defaultConfig {
-        minSdkVersion 21
+        minSdkVersion 24
     }
 
     buildTypes {
@@ -64,6 +64,7 @@ android {
 
     aaptOptions {
         noCompress 'tflite'
+        noCompress 'wav'
     }
 
     lintOptions {

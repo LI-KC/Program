@@ -247,16 +247,6 @@ class _WaveState extends State<Wave> {
   LineChartData mainData() {
     return LineChartData(
       lineTouchData: LineTouchData(
-        // getTouchedSpotIndicator:
-        //     (LineChartBarData barData, List<int> spotIndexes) {
-        //   return spotIndexes.map((spotIndex) {
-        //     if ([...widget.scoreList![spotIndex].values][0].cough == 0 &&
-        //         [...widget.scoreList![spotIndex].values][0].snore == 0) {
-        //       return TouchedSpotIndicatorData(
-        //           FlLine(color: Colors.white, strokeWidth: 4), FlDotData());
-        //     }
-        //   }).toList();
-        // },
         touchTooltipData: LineTouchTooltipData(
           getTooltipItems: (
             List<LineBarSpot> touchedBarSpots,
